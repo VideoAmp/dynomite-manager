@@ -18,23 +18,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.netflix.dynomitemanager.defaultimpl.IConfiguration;
 import com.netflix.dynomitemanager.sidecore.utils.Sleeper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
 
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,6 +34,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * @author ipapapa
@@ -109,7 +103,7 @@ public class RedisStorageProxy implements IStorageProxy {
      *
      * @param peer
      *            address
-     * @param peer
+     * @param port
      *            port
      */
     private void startPeerSync(String peer, int port) {
@@ -182,7 +176,7 @@ public class RedisStorageProxy implements IStorageProxy {
 	     * may be having old data in the disk.
 	     */
 	} catch (JedisDataException e) {
-	    String scheduled = null;
+	    String scheduled;
 	    if (!config.isRedisAofEnabled()) {
 		scheduled = "ERR Background save already in progress";
 	    } else {
@@ -195,14 +189,14 @@ public class RedisStorageProxy implements IStorageProxy {
 	    logger.warn("Redis: There is already a pending BGREWRITEAOF/BGSAVE.");
 	}
 
-	String peerRedisInfo = null;
+	String peerRedisInfo;
 	int retry = 0;
 
 	try {
 	    while (true) {
 		peerRedisInfo = this.localJedis.info();
 		Iterable<String> result = Splitter.on('\n').split(peerRedisInfo);
-		String pendingPersistence = null;
+		String pendingPersistence;
 
 		for (String line : result) {
 		    if ((line.startsWith("aof_rewrite_in_progress") && config.isRedisAofEnabled())

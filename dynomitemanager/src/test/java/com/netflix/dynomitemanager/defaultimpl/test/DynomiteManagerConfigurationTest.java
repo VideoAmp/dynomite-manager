@@ -35,13 +35,12 @@ import static org.hamcrest.CoreMatchers.is;
  */
 @RunWith(JMockit.class)
 public class DynomiteManagerConfigurationTest {
-    @Mocked ICredential credential;
-    @Mocked IConfigSource configSource;
-    @Mocked InstanceDataRetriever instanceDataRetriever;
-    @Mocked InstanceEnvIdentity instanceEnvIdentity;
-    @Mocked IStorageProxy storageProxy;
+    @Mocked private ICredential credential;
+    @Mocked private IConfigSource configSource;
+    @Mocked private InstanceDataRetriever instanceDataRetriever;
+    @Mocked private InstanceEnvIdentity instanceEnvIdentity;
 
-    IConfiguration conf;
+    private IConfiguration conf;
 
     @BeforeClass
     public static void onlyOnce() {
@@ -50,8 +49,7 @@ public class DynomiteManagerConfigurationTest {
 
     @Before
     public void runBeforeTests() {
-        conf = new DynomiteManagerConfiguration(credential, configSource, instanceDataRetriever, instanceEnvIdentity,
-                storageProxy);
+        conf = new DynomiteManagerConfiguration(credential, configSource, instanceDataRetriever, instanceEnvIdentity);
     }
 
     // Dynomite

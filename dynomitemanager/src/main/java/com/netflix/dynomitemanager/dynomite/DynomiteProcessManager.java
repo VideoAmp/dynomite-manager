@@ -65,7 +65,7 @@ public class DynomiteProcessManager implements IDynomiteProcess {
     }
 
     public void start() throws IOException {
-	logger.info(String.format("Starting dynomite server"));
+	logger.info("Starting dynomite server");
 
 	List<String> command = Lists.newArrayList();
 	if (!"root".equals(System.getProperty("user.name"))) {
@@ -224,7 +224,7 @@ public class DynomiteProcessManager implements IDynomiteProcess {
     public boolean dynomiteProcessCheck() {
         try
         {
-            String cmd = String.format("ps -ef | grep  '[/]apps/%1$s/bin/%1$s'", config.getDynomiteProcessName());
+            String cmd = String.format("pgrep -x '%1$s'", config.getDynomiteProcessName());
             String[] cmdArray = {"/bin/sh", "-c", cmd};
             logger.debug("Running checkProxyProcess command: " + cmd);
 

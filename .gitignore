@@ -38,3 +38,8 @@ lib-cov
 *.classpath
 *.project
 */.settings/*
+classes/
+.python-version
+docker/dynomite-manager/conf/membership.yml
+*.pyc
+target

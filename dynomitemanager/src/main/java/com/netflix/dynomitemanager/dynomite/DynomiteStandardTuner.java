@@ -73,7 +73,7 @@ public class DynomiteStandardTuner implements ProcessTuner {
 
 	entries.put("auto_eject_hosts", config.getDynomiteAutoEjectHosts());
 	entries.put("rack", config.getRack());
-	entries.put("distribution", config.getDistribution());
+	// entries.put("distribution", config.getDistribution());
 	entries.put("dyn_listen", config.getDynListenPort());
 	entries.put("dyn_seed_provider", config.getDynomiteSeedProvider());
 	entries.put("gos_interval", config.getDynomiteGossipInterval());
@@ -83,12 +83,13 @@ public class DynomiteStandardTuner implements ProcessTuner {
 	entries.put("server_retry_timeout", config.getServerRetryTimeout());
 	entries.put("timeout", config.getTimeout());
 	entries.put("tokens", ii.getTokens());
+	entries.put("hash_tag", "{}");
 	entries.put("secure_server_option", config.getDynomiteIntraClusterSecurity());
 	entries.remove("redis");
 	entries.put("datacenter", config.getDataCenter());
 	entries.put("read_consistency", config.getDynomiteReadConsistency());
 	entries.put("write_consistency", config.getDynomiteWriteConsistency());
-	entries.put("pem_key_file", "/apps/dynomite/conf/dynomite.pem");
+	entries.put("pem_key_file", config.getDynomitePemKeyFile());
 
 	List seedp = (List) entries.get("dyn_seeds");
 	if (seedp == null) {

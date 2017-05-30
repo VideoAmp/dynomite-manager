@@ -274,7 +274,7 @@ public class InstanceDataDAOCassandra {
 			for (Row<String, String> row : result.getResult().getRows())
 				set.add(transform(row.getColumns()));
 		} catch (Exception e) {
-			logger.warn("Caught an Unknown Exception during reading msgs ... -> " + e.getMessage());
+			logger.warn("Caught an Unknown Exception during reading msgs (app = " + app + ")... -> " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 		return set;

@@ -1,0 +1,23 @@
+dyn_o_mite:
+  dyn_seeds:
+  - 127.0.0.1:8101:us-east-1b:us-east-1:0
+  dyn_seed_provider: simple_provider
+  dyn_listen: 0.0.0.0:8101
+  data_store: 0
+  listen: 0.0.0.0:8102
+  servers:
+  - 127.0.0.1:22122:1
+  tokens: '0'
+  gos_interval: 10000
+  hash: murmur
+  preconnect: true
+  server_retry_timeout: 30000
+  timeout: 5000
+  secure_server_option: none
+  datacenter: us-east-1
+  read_consistency: DC_ONE
+  write_consistency: DC_ONE
+  stats_listen: 0.0.0.0:22222
+  mbuf_size: 16384
+  max_msgs: 300000
+  pem_key_file: /etc/dynomite/dynomite.pem

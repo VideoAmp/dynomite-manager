@@ -50,6 +50,11 @@ public class CassandraInstanceFactory implements IAppsInstanceFactory {
 		}
 
 		sort(return_);
+
+		for (AppsInstance inst : return_) {
+			logger.debug(inst.toString());
+		}
+
 		return return_;
 	}
 

@@ -81,6 +81,9 @@ public class BlankConfiguration implements IConfiguration {
     }
 
     @Override
+    public String getMembershipYaml() { return null; }
+
+    @Override
     public String getDynomiteYaml() {
 	return null;
     }
@@ -89,6 +92,9 @@ public class BlankConfiguration implements IConfiguration {
     public String getDynomiteWriteConsistency() {
 	return null;
     }
+
+    @Override
+    public String getDynomitePemKeyFile() { return null; }
 
     @Override
     public String getVpcId() {
@@ -207,11 +213,6 @@ public class BlankConfiguration implements IConfiguration {
 
     @Override
     public String getDynListenPort() {
-	return null;
-    }
-
-    @Override
-    public String getDistribution() {
 	return null;
     }
 

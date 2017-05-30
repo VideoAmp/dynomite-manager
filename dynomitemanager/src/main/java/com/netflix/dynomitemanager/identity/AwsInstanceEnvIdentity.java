@@ -12,7 +12,6 @@
  */
 package com.netflix.dynomitemanager.identity;
 
-import com.google.inject.Singleton;
 import com.netflix.dynomitemanager.sidecore.config.InstanceDataRetriever;
 import com.netflix.dynomitemanager.sidecore.config.VpcInstanceDataRetriever;
 

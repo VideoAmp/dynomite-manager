@@ -10,3 +10,8 @@ dependencies {
 
 jettyRun.contextPath = ''
 jettyRunWar.contextPath = ''
+
+
+// apply plugin: 'application'
+
+// mainClassName = "com.netflix.dynomitemanager.Runner"

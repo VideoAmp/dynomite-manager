@@ -13,21 +13,11 @@
 
 package com.netflix.dynomitemanager;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.quartz.SchedulerFactory;
-import org.quartz.impl.StdSchedulerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.name.Names;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.netflix.dynomitemanager.defaultimpl.DynomiteManagerConfiguration;
@@ -35,22 +25,19 @@ import com.netflix.dynomitemanager.defaultimpl.IConfiguration;
 import com.netflix.dynomitemanager.dynomite.DynomiteProcessManager;
 import com.netflix.dynomitemanager.dynomite.DynomiteStandardTuner;
 import com.netflix.dynomitemanager.dynomite.IDynomiteProcess;
-import com.netflix.dynomitemanager.identity.CassandraInstanceFactory;
-import com.netflix.dynomitemanager.identity.DefaultVpcInstanceEnvIdentity;
-import com.netflix.dynomitemanager.identity.IAppsInstanceFactory;
-import com.netflix.dynomitemanager.identity.IMembership;
-import com.netflix.dynomitemanager.identity.InstanceEnvIdentity;
+import com.netflix.dynomitemanager.identity.*;
 import com.netflix.dynomitemanager.monitoring.JedisFactory;
 import com.netflix.dynomitemanager.monitoring.SimpleJedisFactory;
 import com.netflix.dynomitemanager.sidecore.ICredential;
-import com.netflix.dynomitemanager.sidecore.aws.AWSMembership;
-import com.netflix.dynomitemanager.sidecore.aws.AwsRoleAssumptionCredential;
+import com.netflix.dynomitemanager.sidecore.aws.EnvironmentVariableAwsCredential;
 import com.netflix.dynomitemanager.sidecore.aws.IAMCredential;
+import com.netflix.dynomitemanager.sidecore.aws.YamlMembership;
 import com.netflix.dynomitemanager.sidecore.backup.Backup;
 import com.netflix.dynomitemanager.sidecore.backup.Restore;
 import com.netflix.dynomitemanager.sidecore.backup.S3Backup;
 import com.netflix.dynomitemanager.sidecore.backup.S3Restore;
 import com.netflix.dynomitemanager.sidecore.config.InstanceDataRetriever;
+import com.netflix.dynomitemanager.sidecore.config.LocalInstanceDataRetriever;
 import com.netflix.dynomitemanager.sidecore.config.VpcInstanceDataRetriever;
 import com.netflix.dynomitemanager.sidecore.storage.IStorageProxy;
 import com.netflix.dynomitemanager.sidecore.storage.RedisStorageProxy;
@@ -61,6 +48,14 @@ import com.netflix.dynomitemanager.supplier.HostSupplier;
 import com.netflix.karyon.spi.HealthCheckHandler;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
+import org.quartz.SchedulerFactory;
+import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Inject dependencies, parse the configuration, and initialize the Dynomite Manager server.
@@ -129,7 +124,6 @@ public class InjectedWebListener extends GuiceServletContextListener {
 	    // binder().bind(HostSupplier.class).to(EurekaHostsSupplier.class);
 	    binder().bind(HostSupplier.class).to(CassandraLocalHostsSupplier.class);
 
-	    // binder().bind(InstanceEnvIdentity.class).to(LocalInstanceEnvIdentity.class);
 	    binder().bind(HealthCheckHandler.class).to(FloridaHealthCheckHandler.class).asEagerSingleton();
 
 	    // binder().bind(GuiceContainer.class).asEagerSingleton();
@@ -139,10 +133,14 @@ public class InjectedWebListener extends GuiceServletContextListener {
 	    binder().bind(IInstanceState.class).to(InstanceState.class);
 
 	    /* AWS binding */
-	    bind(IMembership.class).to(AWSMembership.class);
-	    bind(ICredential.class).to(IAMCredential.class);
-	    bind(ICredential.class).annotatedWith(Names.named("awsroleassumption")).to(AwsRoleAssumptionCredential.class);
-	    binder().bind(InstanceEnvIdentity.class).to(DefaultVpcInstanceEnvIdentity.class).asEagerSingleton();
+		// bind(IMembership.class).to(AWSMembership.class);
+	    bind(IMembership.class).to(YamlMembership.class);
+		bind(ICredential.class).to(IAMCredential.class);
+		// bind(ICredential.class).to(EnvironmentVariableAwsCredential.class);
+	    // bind(ICredential.class).annotatedWith(Names.named("awsroleassumption")).to(AwsRoleAssumptionCredential.class);
+	    // binder().bind(InstanceEnvIdentity.class).to(AwsInstanceEnvIdentity.class).asEagerSingleton();
+		// binder().bind(InstanceEnvIdentity.class).to(GenericInstanceEnvIdentity.class).asEagerSingleton();
+		binder().bind(InstanceEnvIdentity.class).to(NonDefaultVpcInstanceEnvIdentity.class).asEagerSingleton();
 	    bind(Backup.class).to(S3Backup.class);
 	    bind(Restore.class).to(S3Restore.class);
 

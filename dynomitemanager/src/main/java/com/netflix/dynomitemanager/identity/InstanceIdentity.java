@@ -312,10 +312,12 @@ public class InstanceIdentity {
 	// populateRacMap();
 	List<String> seeds = new LinkedList<String>();
 
-	for (AppsInstance ins : factory.getAllIds(config.getDynomiteClusterName())) {
+	String clusterName = config.getDynomiteClusterName();
+
+	for (AppsInstance ins : factory.getAllIds(clusterName)) {
 	    if (!ins.getInstanceId().equals(myInstance.getInstanceId())) {
 		logger.debug("Adding node: " + ins.getInstanceId());
-		seeds.add(ins.getHostName() + ":" + config.getDynomitePeerPort() + ":" + ins.getRack() + ":"
+		seeds.add(ins.getHostIP() + ":" + config.getDynomitePeerPort() + ":" + ins.getRack() + ":"
 			+ ins.getDatacenter() + ":" + ins.getToken());
 	    }
 	}

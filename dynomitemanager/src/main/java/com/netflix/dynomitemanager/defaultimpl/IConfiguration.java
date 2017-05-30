@@ -130,6 +130,10 @@ public interface IConfiguration {
      */
     public String getDynomiteWriteConsistency();
 
+    public String getDynomitePemKeyFile();
+
+    public String getMembershipYaml();
+
     /**
      * Get the full path to the dynomite.yml configuration file.
      *
@@ -216,8 +220,6 @@ public interface IConfiguration {
      * @return the peer-to-peer port used for intra-cluster communication
      */
     public int getDynomitePeerPort();
-
-    public String getDistribution();
 
     public String getDynListenPort();
 

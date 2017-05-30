@@ -27,14 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PreStartServer implements ServletContextListener {
 	private static final Logger logger = LoggerFactory.getLogger(PreStartServer.class);
-	static final String bootPropFileName = "/etc/dynomitemanager.properties";
-	static final String APP_NAME = deriveAppName();
-
-	static String deriveAppName() {
-		final String name = System.getenv("NETFLIX_APP");
-		System.setProperty("netflix.appinfo.name", name);
-		return name;
-	}
+	private static final String bootPropFileName = "/etc/dynomitemanager.properties";
 
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		// OK, this is messy as we need to tell platform not to use platform service for properties if this is a

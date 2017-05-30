@@ -182,7 +182,7 @@ public class ServoMetricsTask extends Task {
             }
 
         } catch (Exception e) {
-            Logger.error("Failed to get metrics from Dynomite's REST endpoint: " + ServerMetricsUrl.get(), e);
+            Logger.warn("Failed to get metrics from Dynomite's REST endpoint: " + ServerMetricsUrl.get(), e);
             e.printStackTrace();
         } catch (Throwable t) {
             Logger.error("FAILED to get metrics from Dynomite's REST endpoint: " + ServerMetricsUrl.get(), t);

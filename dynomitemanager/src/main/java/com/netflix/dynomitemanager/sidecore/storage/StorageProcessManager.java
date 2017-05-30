@@ -109,7 +109,9 @@ public class StorageProcessManager {
      */
     private List<String> getStartCommand() {
 	List<String> startCmd = new LinkedList<String>();
-	for (String param : storageProxy.getStartupScript().split(" ")) {
+	String cmd = storageProxy.getStartupScript();
+	logger.debug(String.format("Storage Startup Script: %s", cmd));
+	for (String param : cmd.split(" ")) {
 	    if (StringUtils.isNotBlank(param))
 		startCmd.add(param);
 	}
@@ -123,7 +125,9 @@ public class StorageProcessManager {
      */
     private List<String> getStopCommand() {
 	List<String> stopCmd = new LinkedList<String>();
-	for (String param : storageProxy.getStartupScript().split(" ")) {
+	String cmd = storageProxy.getStopScript();
+	logger.debug(String.format("Storage Stop Script: %s", cmd));
+	for (String param : storageProxy.getStopScript().split(" ")) {
 	    if (StringUtils.isNotBlank(param))
 		stopCmd.add(param);
 	}
@@ -156,7 +160,7 @@ public class StorageProcessManager {
      * @throws IOException
      */
     public void stop() throws IOException {
-	logger.info("Stopping storage process...");
+	logger.info("Stopping storage process... " + getStopCommand());
 	ProcessBuilder stopBuilder = process(getStopCommand());
 	Process stopper = stopBuilder.start();
 
