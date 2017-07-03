@@ -534,8 +534,16 @@ import java.util.List;
 				"datacenter");
 	}
 
+
+
 	@Override public String getClientListenPort() {
-		return "0.0.0.0:" + getDynomiteClientPort();
+		String address = System.getenv("LOCAL_IP");
+
+		if (address == null || address.isEmpty()) {
+			address = "0.0.0.0";
+		}
+
+		return address + ":" + getDynomiteClientPort();
 	}
 
 	public int getDynomiteMaxAllocatedMessages() {
